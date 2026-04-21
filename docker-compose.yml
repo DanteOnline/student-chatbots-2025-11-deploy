@@ -1,5 +1,6 @@
 services:
   bot:
+    image: danteonline/student-otus-bot
     build:
       context: .
     env_file:
