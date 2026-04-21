@@ -9,7 +9,6 @@ services:
       - "${WEBHOOK_PORT:-8000}:${WEBHOOK_PORT:-8000}"
     volumes:
       - sqlite_data:/data
-    # restart: unless-stopped
 
 volumes:
   sqlite_data:

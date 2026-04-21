@@ -1,0 +1,42 @@
+volumes:
+  sqlite_data:
+
+services:
+  bot:
+    image: danteonline/student-otus-bot
+    env_file:
+      - .env
+    expose:
+      - "${WEBHOOK_PORT:-8321}"
+    volumes:
+      - sqlite_data:/data
+    environment:
+      - VIRTUAL_HOST=kapitanlevan.com
+      - VIRTUAL_PORT=${WEBHOOK_PORT:-8321}
+      - LETSENCRYPT_HOST=kapitanlevan.com
+      - LETSENCRYPT_EMAIL=quill@craftsman.lol
+
+  nginx-proxy:
+    image: jwilder/nginx-proxy
+    container_name: nginx-proxy
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - /etc/nginx/certs:/etc/nginx/certs:rw
+      - /etc/nginx/vhost.d
+      - /usr/share/nginx/html
+      - /var/run/docker.sock:/tmp/docker.sock:ro
+    depends_on:
+      - bot
+
+  acme-companion:
+    image: nginxproxy/acme-companion
+    container_name: acme-companion
+    depends_on:
+      - nginx-proxy
+    volumes_from:
+      - nginx-proxy
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - /etc/acme.sh:/etc/acme.sh
