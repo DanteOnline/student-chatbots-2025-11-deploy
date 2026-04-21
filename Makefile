@@ -17,7 +17,7 @@ lint:
 	poetry run ruff check .
 
 migrate:
-	alembic upgrade head
+	poetry run alembic upgrade head
 
 make_migrations:
 	alembic revision --autogenerate
