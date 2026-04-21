@@ -26,4 +26,4 @@ ngrok:
 	ngrok http 8000
 
 test:
-	pytest
+	poetry run pytest
