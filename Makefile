@@ -24,3 +24,6 @@ make_migrations:
 
 ngrok:
 	ngrok http 8000
+
+test:
+	pytest
